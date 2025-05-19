@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scanner PDF Web App</title>
+    <style>
+        .danger { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h2>Scanner PDF Web App</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Scan Button -->
+    <form method="post" action="{{ url_for('scan') }}">
+        <button type="submit">Scan Document (server-side)</button>
+    </form>
+
+    <hr>
+
+    <!-- Upload Images -->
+    <form method="post" enctype="multipart/form-data" action="{{ url_for('upload') }}">
+        <input type="file" name="images" multiple accept="image/*">
+        <button type="submit">Upload Images</button>
+    </form>
+
+    <hr>
+
+    {% if pdf_path %}
+        <a href="{{ url_for('download', filename=pdf_path|basename) }}">Download PDF</a>
+    {% endif %}
+</body>
+</html>

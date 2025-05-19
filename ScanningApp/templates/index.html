@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scanner PDF Web App</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f8f8f8; }
+        h2 { color: #333; }
+        form { margin-bottom: 20px; }
+        .messages ul { list-style: none; padding: 0; }
+        .messages li { margin-bottom: 8px; }
+        .download-link { margin-top: 20px; display: block; font-weight: bold; }
+        .section { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px #eee; }
+    </style>
+</head>
+<body>
+    <h2>Scanner PDF Web App</h2>
+    <div class="messages">
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div>
+    {% for category, message in messages %}
+      <span style="color:{{'red' if category=='danger' else 'green'}}; margin-right: 10px;">{{ message }}</span>
+    {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+</div>
+    <div class="section">
+        <form method="post">
+            <button name="scan" type="submit">Scan Document (server-side)</button>
+        </form>
+    </div>
+    <div class="section">
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="images" multiple accept="image/*">
+            <button name="upload" type="submit">Upload Images</button>
+        </form>
+    </div>
+    {% if pdf_path %}
+        <a class="download-link" href="{{ url_for('download', filename=pdf_path.split('/')[-1]) }}">Download PDF</a>
+    {% endif %}
+</body>
+</html>
